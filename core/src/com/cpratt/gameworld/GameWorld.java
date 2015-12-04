@@ -34,12 +34,12 @@ public class GameWorld {
      * Calls the update functions for each game object.
      * Updates:
      * -Ball
-     * -Paddle
+     * -Paddles
      */
     public void update(float delta) {
-        ball.update(delta);
+        ball.update(delta, paddle, computerPaddle);
         paddle.update(delta);
-//        computerPaddle.update(delta);
+        computerPaddle.update(delta);
     }
 
     public Ball getBall() {

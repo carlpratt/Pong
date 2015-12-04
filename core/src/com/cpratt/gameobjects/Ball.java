@@ -1,6 +1,7 @@
 package com.cpratt.gameobjects;
 
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.cpratt.screens.GameScreen;
@@ -23,7 +24,7 @@ public class Ball {
     private int ballRadius = 5;
 
     private Rectangle rect = new Rectangle(0, 102, 17, 12);
-    private Circle ball = new Circle(ballRadius, yMid, ballRadius);
+    private Circle boundingCircle = new Circle(ballRadius, yMid, ballRadius);
 
     public Ball(float x, float y, float radius) {
         this.radius = radius;
@@ -36,7 +37,7 @@ public class Ball {
     /**
      * Detects collision with the screen bounds and inverts velocity and acceleration accordingly
      */
-    public void update(float delta) {
+    public void update(float delta, Paddle paddle, Paddle computerPaddle) {
 
         velocity.add(acceleration.cpy().scl(delta));
 
@@ -57,7 +58,26 @@ public class Ball {
             acceleration.y *= -1;
         }
 
+        if (collides(paddle) || collides(computerPaddle)) {
+            velocity.x *= -1;
+            acceleration.x *= -1;
+        }
+
         position.add(velocity.cpy().scl(delta));
+
+        updateBoundingCircle(position);
+    }
+
+    private void updateBoundingCircle(Vector2 position) {
+        boundingCircle.setX(position.x);
+        boundingCircle.setY(position.y);
+    }
+
+    public boolean collides(Paddle paddle) {
+        if (Math.abs(position.x - paddle.getX()) < 10) {
+            return Intersector.overlaps(getBoundingCircle(), paddle.getBoundingRectangle());
+        }
+        return false;
     }
 
     public float getX() {
@@ -70,5 +90,9 @@ public class Ball {
 
     public float getRadius() {
         return radius;
+    }
+
+    public Circle getBoundingCircle() {
+        return boundingCircle;
     }
 }
