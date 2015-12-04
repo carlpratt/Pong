@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.cpratt.gameworld.GameRenderer;
 import com.cpratt.gameworld.GameWorld;
+import com.cpratt.helpers.InputHandler;
 
 public class GameScreen implements Screen {
 
@@ -33,6 +34,8 @@ public class GameScreen implements Screen {
 
         world.update(delta); // GameWorld updates
         renderer.render(); // GameRenderer renders
+
+        Gdx.input.setInputProcessor(new InputHandler(world.getPaddle())); // Handles ball input
     }
 
     @Override

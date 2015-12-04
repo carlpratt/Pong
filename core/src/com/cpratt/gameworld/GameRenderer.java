@@ -41,11 +41,25 @@ public class GameRenderer {
         // Chooses RGB Color of 87, 109, 120 at full opacity
         shapeRenderer.setColor(255 / 255.0f, 255 / 255.0f, 255 / 255.0f, 1);
 
-        // Draws the rectangle from myWorld (Using ShapeType.Filled)
+        // Draws the circle from myWorld (Using ShapeType.Filled)
         shapeRenderer.circle(myWorld.getBall().getX(), myWorld.getBall().getY(), myWorld.getBall().getRadius());
 
         // Tells the shapeRenderer to finish rendering
         // We MUST do this every time.
+        shapeRenderer.end();
+
+
+        /** Renders PADDLE */
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(255 / 255.0f, 255 / 255.0f, 255 / 255.0f, 1);
+        shapeRenderer.rect(myWorld.getPaddle().getX(), myWorld.getPaddle().getY(), myWorld.getPaddle().getWidth(), myWorld.getPaddle().getHeight());
+        shapeRenderer.end();
+
+        /** Renders COMPUTER PADDLE */
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(255 / 255.0f, 255 / 255.0f, 255 / 255.0f, 1);
+        shapeRenderer.rect(myWorld.getComputerPaddle().getX(), myWorld.getComputerPaddle().getY(),
+                myWorld.getComputerPaddle().getWidth(), myWorld.getComputerPaddle().getHeight());
         shapeRenderer.end();
     }
 }

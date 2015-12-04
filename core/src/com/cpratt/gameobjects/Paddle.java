@@ -4,11 +4,12 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Paddle {
 
+    private int PADDLE_SPEED = 150;
+
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 acceleration;
 
-    private float rotation; // For handling bird rotation
     private int width;
     private int height;
 
@@ -17,36 +18,15 @@ public class Paddle {
         this.height = height;
         position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
-        acceleration = new Vector2(0, 460);
+        acceleration = new Vector2(0, 0);
     }
 
     public void update(float delta) {
 
         velocity.add(acceleration.cpy().scl(delta));
 
-        if (velocity.y > 200) {
-            velocity.y = 200;
-        }
+        position.add(velocity.cpy().scl(delta));
 
-//        if ((position.x + ball.radius) > screenWidth) {
-//            velocity.x = velocity.x * -1;
-//        }
-//        if ((position.x - ball.radius) < 0) {
-//            velocity.x = velocity.x * -1;
-//        }
-//        if ((position.y + ball.radius) > screenHeight) {
-//            velocity.y = velocity.y * -1;
-//        }
-//        if ((position.y - ball.radius) < 0) {
-//            velocity.y = velocity.y * -1;
-//        }
-//
-//        position.add(velocity.cpy().scl(delta));
-
-    }
-
-    public void onClick() {
-//        velocity.y = -140;
     }
 
     public float getX() {
@@ -63,5 +43,17 @@ public class Paddle {
 
     public float getHeight() {
         return height;
+    }
+
+    public void moveUp() {
+        velocity.y = -PADDLE_SPEED;
+    }
+
+    public void moveDown() {
+        velocity.y = PADDLE_SPEED;
+    }
+
+    public void stopMoving() {
+        velocity.y = 0;
     }
 }
