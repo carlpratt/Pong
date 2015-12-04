@@ -44,7 +44,7 @@ public class GameWorld {
     public void update(float delta) {
         ball.update(delta, paddle, computerPaddle);
         paddle.update(delta);
-        computerPaddle.update(delta);
+        computerPaddle.updateAuto(delta, ball);
 
         if (ball.isOutOfBoundsOnComputerSide()) {
             playerScore++;

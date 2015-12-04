@@ -40,6 +40,34 @@ public class Paddle {
         }
     }
 
+    public void updateAuto(float delta, Ball ball) {
+        // Ball moving down, paddle should move down
+        if (ball.getVelocity().y > 0 && ball.getPosition().y > (this.getY() + (this.height / 2))) {
+            moveDown();
+        }
+        // Ball moving down, paddle should move up
+        if (ball.getVelocity().y > 0 && ball.getPosition().y < (this.getY() + (this.height / 2))) {
+            moveUp();
+        }
+        // Ball moving up, paddle should move down
+        if (ball.getVelocity().y < 0 && ball.getPosition().y > (this.getY() + (this.height / 2))) {
+            moveDown();
+        }
+        // Ball moving down, paddle should move down
+        if (ball.getVelocity().y < 0 && ball.getPosition().y < (this.getY() + (this.height / 2))) {
+            moveUp();
+        }
+        velocity.add(acceleration.cpy().scl(delta));
+        position.add(velocity.cpy().scl(delta));
+        updateBoundingRectangle(position);
+
+        if (position.y <= 0 && Math.signum(velocity.y) == -1) {
+            stopMoving();
+        } else if (position.y >= GameScreen.SCREEN_HEIGHT - height && Math.signum(velocity.y) == 1) {
+            stopMoving();
+        }
+    }
+
     private void updateBoundingRectangle(Vector2 position) {
         boundingRectangle.setX(position.x);
         boundingRectangle.setY(position.y);
@@ -86,5 +114,16 @@ public class Paddle {
 
     public Rectangle getBoundingRectangle() {
         return boundingRectangle;
+    }
+
+    // Only when x velocity is positive (going towards computer)
+    private int calculateBallDestinationY(Ball ball) {
+        float x = ball.getX();
+
+        while (x < GameScreen.SCREEN_WIDTH) {
+
+        }
+
+        return 0;
     }
 }
