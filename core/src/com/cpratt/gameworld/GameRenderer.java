@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.cpratt.gameobjects.Ball;
 import com.cpratt.gameobjects.Paddle;
@@ -20,12 +22,18 @@ public class GameRenderer {
     private Paddle paddle;
     private Paddle computerPaddle;
 
+    SpriteBatch spriteBatch;
+    BitmapFont font;
+
     public GameRenderer(GameWorld world) {
         myWorld = world;
         cam = new OrthographicCamera();
         cam.setToOrtho(true, GameScreen.SCREEN_WIDTH, GameScreen.SCREEN_HEIGHT);
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
+
+        spriteBatch = new SpriteBatch();
+        font = new BitmapFont();
         
         initGameObjects();
     }
@@ -68,5 +76,27 @@ public class GameRenderer {
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.rect(computerPaddle.getX(), computerPaddle.getY(), computerPaddle.getWidth(), computerPaddle.getHeight());
         shapeRenderer.end();
+
+
+        /** Renders MIDDLE LINES */
+        int y = 0;
+        while((y + 7) < GameScreen.SCREEN_HEIGHT) {
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.rect(GameScreen.SCREEN_WIDTH / 2, y, 3, 7);
+            shapeRenderer.end();
+            y += 10;
+        }
+
+
+        /** Renders PLAYER SCORE */
+        spriteBatch.begin();
+        font.setColor(Color.WHITE); // Need to use the actual screen dimensions here for some reason
+        font.draw(spriteBatch, Integer.toString(myWorld.getPlayerScore()),
+                (Gdx.graphics.getWidth() / 2) - 40, Gdx.graphics.getHeight() - 20);
+        font.setColor(Color.WHITE);
+        font.draw(spriteBatch, Integer.toString(myWorld.getComputerScore()),
+                (Gdx.graphics.getWidth() / 2) + 40, Gdx.graphics.getHeight() - 20);
+        spriteBatch.end();
     }
 }

@@ -14,9 +14,6 @@ public class Ball {
     private Vector2 velocity;
     private Vector2 acceleration;
 
-    private int width;
-    private int height;
-
     private float radius;
 
     private int screenWidth = GameScreen.SCREEN_WIDTH;
@@ -30,13 +27,19 @@ public class Ball {
 
     private Random random = new Random();
 
-    public Ball(float x, float y, float radius) {
+    private boolean outOfBoundsOnPlayerSide = false;
+    private boolean outOfBoundsOnComputerSide = false;
+
+    private int startX = screenWidth / 2;
+    private int startY = screenHeight / 2;
+
+    public Ball(float radius) {
         this.radius = radius;
 
         int startVelocityX = calculateStartVelocityX();
         int startVelocityY = calculateStartVelocityY();
 
-        position = new Vector2(x, y);
+        position = new Vector2(startX, startY);
         velocity = new Vector2(startVelocityX, startVelocityY);
         acceleration = new Vector2(0, 0);
     }
@@ -48,13 +51,19 @@ public class Ball {
 
         velocity.add(acceleration.cpy().scl(delta));
 
+        // Computer side
         if ((position.x + radius) > screenWidth && Math.signum(velocity.x) == 1) {
-            velocity.x *= -1;
-            acceleration.x *= -1;
+//            velocity.x *= -1;
+//            acceleration.x *= -1;
+            stopMoving();
+            outOfBoundsOnComputerSide = true;
         }
+        // Player Side
         if ((position.x - radius) < 0 && Math.signum(velocity.x) == -1) {
-            velocity.x *= -1;
-            acceleration.x *= -1;
+//            velocity.x *= -1;
+//            acceleration.x *= -1;
+            stopMoving();
+            outOfBoundsOnPlayerSide = true;
         }
         if ((position.y + radius) > screenHeight && Math.signum(velocity.y) == 1) {
             velocity.y *= -1;
@@ -87,6 +96,25 @@ public class Ball {
         return false;
     }
 
+    private void stopMoving() {
+        velocity.x = 0;
+        velocity.y = 0;
+        acceleration.x = 0;
+        acceleration.y = 0;
+    }
+
+    public void reset() {
+        position.x = startX;
+        position.y = startY;
+        velocity.x = calculateStartVelocityX();
+        velocity.y = calculateStartVelocityY();
+        acceleration.x = 0;
+        acceleration.y = 0;
+
+        outOfBoundsOnPlayerSide = false;
+        outOfBoundsOnComputerSide = false;
+    }
+
     private int calculateStartVelocityX() {
         return random.nextBoolean() ? 100 : -100;
     }
@@ -109,5 +137,13 @@ public class Ball {
 
     public Circle getBoundingCircle() {
         return boundingCircle;
+    }
+
+    public boolean isOutOfBoundsOnPlayerSide() {
+        return outOfBoundsOnPlayerSide;
+    }
+
+    public boolean isOutOfBoundsOnComputerSide() {
+        return outOfBoundsOnComputerSide;
     }
 }

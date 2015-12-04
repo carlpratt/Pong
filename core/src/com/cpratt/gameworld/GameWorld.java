@@ -26,8 +26,11 @@ public class GameWorld {
     private Paddle paddle;
     private Paddle computerPaddle;
 
+    private int playerScore = 0;
+    private int computerScore = 0;
+
     public GameWorld() {
-        ball = new Ball(GameScreen.SCREEN_WIDTH / 2, yMid, ballRadius);
+        ball = new Ball(ballRadius);
         paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight);
         computerPaddle = new Paddle(computerPaddleX, computerPaddleY, paddleWidth, paddleHeight);
     }
@@ -42,6 +45,14 @@ public class GameWorld {
         ball.update(delta, paddle, computerPaddle);
         paddle.update(delta);
         computerPaddle.update(delta);
+
+        if (ball.isOutOfBoundsOnComputerSide()) {
+            playerScore++;
+            ball.reset();
+        } else if (ball.isOutOfBoundsOnPlayerSide()) {
+            computerScore++;
+            ball.reset();
+        }
     }
 
     public Ball getBall() {
@@ -54,5 +65,13 @@ public class GameWorld {
 
     public Paddle getComputerPaddle() {
         return computerPaddle;
+    }
+
+    public int getPlayerScore() {
+        return playerScore;
+    }
+
+    public int getComputerScore() {
+        return computerScore;
     }
 }
