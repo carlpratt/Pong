@@ -8,8 +8,9 @@ import com.cpratt.gameworld.GameWorld;
 
 public class GameScreen implements Screen {
 
-    public static int SCREEN_WIDTH = 330;
-    public static int SCREEN_HEIGHT = 204;
+    // Width and Height values are half the actual screen due to ortho camera
+    public static int SCREEN_WIDTH = Gdx.graphics.getWidth() / 2;
+    public static int SCREEN_HEIGHT = Gdx.graphics.getHeight() / 2;
 
     private GameWorld world;
     private GameRenderer renderer;

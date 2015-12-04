@@ -1,6 +1,9 @@
 package com.cpratt.gameobjects;
 
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.cpratt.screens.GameScreen;
 
 public class Ball {
 
@@ -8,32 +11,53 @@ public class Ball {
     private Vector2 velocity;
     private Vector2 acceleration;
 
-    private float rotation; // For handling bird rotation
     private int width;
     private int height;
 
-    public Ball(float x, float y, int width, int height) {
-        this.width = width;
-        this.height = height;
-        position = new Vector2(x, y);
-        velocity = new Vector2(0, 0);
-        acceleration = new Vector2(0, 460);
+    private float radius;
+
+    private int screenWidth = GameScreen.SCREEN_WIDTH;
+    private int screenHeight = GameScreen.SCREEN_HEIGHT;
+
+    private int yMid = screenHeight / 2;
+    private int ballRadius = 5;
+
+    private Rectangle rect = new Rectangle(0, 102, 17, 12);
+    private Circle ball = new Circle(ballRadius, yMid, ballRadius);
+
+    public Ball(float x, float y, float radius) {
+        this.radius = radius;
+
+        position = new Vector2(x, y);     // Start Position
+        velocity = new Vector2(100, 100); // Start Velocity
+        acceleration = new Vector2(0, 0); // Start Acceleration (no acceleration currently)
     }
 
+    /**
+     * Detects collision with the screen bounds and inverts velocity and acceleration accordingly
+     */
     public void update(float delta) {
 
         velocity.add(acceleration.cpy().scl(delta));
 
-        if (velocity.y > 200) {
-            velocity.y = 200;
+        if ((position.x + radius) > screenWidth) {
+            velocity.x *= -1;
+            acceleration.x *= -1;
+        }
+        if ((position.x - radius) < 0) {
+            velocity.x *= -1;
+            acceleration.x *= -1;
+        }
+        if ((position.y + radius) > screenHeight) {
+            velocity.y *= -1;
+            acceleration.y *= -1;
+        }
+        if ((position.y - radius) < 0) {
+            velocity.y *= -1;
+            acceleration.y *= -1;
         }
 
         position.add(velocity.cpy().scl(delta));
-
-    }
-
-    public void onClick() {
-        velocity.y = -140;
     }
 
     public float getX() {
@@ -44,15 +68,7 @@ public class Ball {
         return position.y;
     }
 
-    public float getWidth() {
-        return width;
-    }
-
-    public float getHeight() {
-        return height;
-    }
-
-    public float getRotation() {
-        return rotation;
+    public float getRadius() {
+        return radius;
     }
 }
