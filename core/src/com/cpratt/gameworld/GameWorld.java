@@ -4,6 +4,8 @@ import com.cpratt.gameobjects.Ball;
 import com.cpratt.gameobjects.Paddle;
 import com.cpratt.screens.GameScreen;
 
+import java.util.concurrent.TimeUnit;
+
 public class GameWorld {
     private int screenWidth = GameScreen.SCREEN_WIDTH;
     private int screenHeight = GameScreen.SCREEN_HEIGHT;
@@ -25,7 +27,7 @@ public class GameWorld {
     private Paddle computerPaddle;
 
     public GameWorld() {
-        ball = new Ball(ballRadius, yMid, ballRadius);
+        ball = new Ball(GameScreen.SCREEN_WIDTH / 2, yMid, ballRadius);
         paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight);
         computerPaddle = new Paddle(computerPaddleX, computerPaddleY, paddleWidth, paddleHeight);
     }

@@ -33,7 +33,9 @@ public class Paddle {
         position.add(velocity.cpy().scl(delta));
         updateBoundingRectangle(position);
 
-        if (position.y <= 0 || position.y >= GameScreen.SCREEN_HEIGHT - height) {
+        if (position.y <= 0 && Math.signum(velocity.y) == -1) {
+            stopMoving();
+        } else if (position.y >= GameScreen.SCREEN_HEIGHT - height && Math.signum(velocity.y) == 1) {
             stopMoving();
         }
     }
@@ -67,11 +69,15 @@ public class Paddle {
     }
 
     public void moveUp() {
-        velocity.y = -PADDLE_SPEED;
+        if (position.y > 0) {
+            velocity.y = -PADDLE_SPEED;
+        }
     }
 
     public void moveDown() {
-        velocity.y = PADDLE_SPEED;
+        if (position.y < GameScreen.SCREEN_HEIGHT - height) {
+            velocity.y = PADDLE_SPEED;
+        }
     }
 
     public void stopMoving() {

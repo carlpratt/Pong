@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.cpratt.screens.GameScreen;
 
+import java.util.Random;
+
 public class Ball {
 
     private Vector2 position;
@@ -26,12 +28,17 @@ public class Ball {
     private Rectangle rect = new Rectangle(0, 102, 17, 12);
     private Circle boundingCircle = new Circle(ballRadius, yMid, ballRadius);
 
+    private Random random = new Random();
+
     public Ball(float x, float y, float radius) {
         this.radius = radius;
 
-        position = new Vector2(x, y);     // Start Position
-        velocity = new Vector2(100, 100); // Start Velocity
-        acceleration = new Vector2(0, 0); // Start Acceleration (no acceleration currently)
+        int startVelocityX = calculateStartVelocityX();
+        int startVelocityY = calculateStartVelocityY();
+
+        position = new Vector2(x, y);
+        velocity = new Vector2(startVelocityX, startVelocityY);
+        acceleration = new Vector2(0, 0);
     }
 
     /**
@@ -41,19 +48,19 @@ public class Ball {
 
         velocity.add(acceleration.cpy().scl(delta));
 
-        if ((position.x + radius) > screenWidth) {
+        if ((position.x + radius) > screenWidth && Math.signum(velocity.x) == 1) {
             velocity.x *= -1;
             acceleration.x *= -1;
         }
-        if ((position.x - radius) < 0) {
+        if ((position.x - radius) < 0 && Math.signum(velocity.x) == -1) {
             velocity.x *= -1;
             acceleration.x *= -1;
         }
-        if ((position.y + radius) > screenHeight) {
+        if ((position.y + radius) > screenHeight && Math.signum(velocity.y) == 1) {
             velocity.y *= -1;
             acceleration.y *= -1;
         }
-        if ((position.y - radius) < 0) {
+        if ((position.y - radius) < 0 && Math.signum(velocity.y) == -1) {
             velocity.y *= -1;
             acceleration.y *= -1;
         }
@@ -78,6 +85,14 @@ public class Ball {
             return Intersector.overlaps(getBoundingCircle(), paddle.getBoundingRectangle());
         }
         return false;
+    }
+
+    private int calculateStartVelocityX() {
+        return random.nextBoolean() ? 100 : -100;
+    }
+
+    private int calculateStartVelocityY() {
+        return random.nextBoolean() ? 100 : -100;
     }
 
     public float getX() {
