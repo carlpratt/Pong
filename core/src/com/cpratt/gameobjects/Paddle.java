@@ -43,19 +43,19 @@ public class Paddle {
     public void updateAuto(float delta, Ball ball) {
         // Ball moving down, paddle should move down
         if (ball.getVelocity().y > 0 && ball.getPosition().y > (this.getY() + (this.height / 2))) {
-            moveDown();
+            moveDownComputer();
         }
         // Ball moving down, paddle should move up
         if (ball.getVelocity().y > 0 && ball.getPosition().y < (this.getY() + (this.height / 2))) {
-            moveUp();
+            moveUpComputer();
         }
         // Ball moving up, paddle should move down
         if (ball.getVelocity().y < 0 && ball.getPosition().y > (this.getY() + (this.height / 2))) {
-            moveDown();
+            moveDownComputer();
         }
         // Ball moving down, paddle should move down
         if (ball.getVelocity().y < 0 && ball.getPosition().y < (this.getY() + (this.height / 2))) {
-            moveUp();
+            moveUpComputer();
         }
         velocity.add(acceleration.cpy().scl(delta));
         position.add(velocity.cpy().scl(delta));
@@ -105,6 +105,18 @@ public class Paddle {
     public void moveDown() {
         if (position.y < GameScreen.SCREEN_HEIGHT - height) {
             velocity.y = PADDLE_SPEED;
+        }
+    }
+
+    public void moveUpComputer() {
+        if (position.y > 0) {
+            velocity.y = -PADDLE_SPEED / 2;
+        }
+    }
+
+    public void moveDownComputer() {
+        if (position.y < GameScreen.SCREEN_HEIGHT - height) {
+            velocity.y = PADDLE_SPEED / 2;
         }
     }
 

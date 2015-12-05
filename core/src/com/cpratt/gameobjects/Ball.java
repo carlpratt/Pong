@@ -41,7 +41,7 @@ public class Ball {
 
         position = new Vector2(startX, startY);
         velocity = new Vector2(startVelocityX, startVelocityY);
-        acceleration = new Vector2(0, 0);
+        acceleration = new Vector2(Math.signum(startVelocityX), Math.signum(startVelocityY));
     }
 
     /**
